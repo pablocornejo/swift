@@ -3893,6 +3893,17 @@ void ClangModuleUnit::getImportedModulesForLookup(
   } else {
     clangModule->getExportedModules(imported);
     topLevel = clangModule->getTopLevelModule();
+
+    // If this is a C++ module, implicitly import the Cxx module, which contains
+    // definitions of Swift protocols that C++ types might conform to, such as
+    // CxxSequence.
+    if (owner.SwiftContext.LangOpts.EnableCXXInterop &&
+        requiresCPlusPlus(clangModule)) {
+      auto *cxxModule =
+          owner.SwiftContext.getModuleByIdentifier(owner.SwiftContext.Id_Cxx);
+      if (cxxModule)
+        imports.push_back({ImportPath::Access(), cxxModule});
+    }
   }
 
   if (imported.empty()) {
