@@ -5,6 +5,8 @@
 // RUN: %target-run %t/statics
 //
 // REQUIRES: executable_test
+// TODO: fix linkage on Windows
+// XFAIL: OS=windows-msvc
 
 import StaticVar
 import StdlibUnittest
