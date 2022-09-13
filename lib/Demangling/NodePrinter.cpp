@@ -603,6 +603,7 @@ private:
     case Node::Kind::UniqueExtendedExistentialTypeShapeSymbolicReference:
     case Node::Kind::NonUniqueExtendedExistentialTypeShapeSymbolicReference:
     case Node::Kind::SymbolicExtendedExistentialType:
+    case Node::Kind::DSLDebugScope:
       return false;
     }
     printer_unreachable("bad node kind");
@@ -3044,6 +3045,13 @@ NodePointer NodePrinter::print(NodePointer Node, unsigned depth,
     Printer << ">";
 
     return nullptr;
+  }
+  case Node::Kind::DSLDebugScope: {
+    auto typeNode = Node->getChild(2);
+    print(typeNode, depth + 1);
+    return printEntity(Node, depth, asPrefixContext, TypePrinting::NoType,
+                       /*hasName*/ false, " #",
+                       (int)Node->getChild(1)->getIndex());
   }
   }
 
