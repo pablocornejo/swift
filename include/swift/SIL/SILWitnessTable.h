@@ -90,7 +90,7 @@ public:
     AssociatedType,
     AssociatedTypeProtocol,
     BaseProtocol
-  };
+  } __attribute__((enum_extensibility(open)));
   
   /// A witness table entry.
   class Entry {
